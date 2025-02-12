@@ -14,16 +14,16 @@ function generateJwtToken() {
     const payload = {
       exp: Math.floor(Date.now() / 1000) + 60 * 60, // 1 hour expiration
     };
-  
     return jwt.sign(payload, CUBEJS_SECRET, { algorithm: "HS256" });
 }
   
-const query = `{cube{item_information{number_of_items created_at{year}}}}`;
-
 app.use(express.static('public'));
 
 app.get('/data', async (req, res) => {
   try {
+    // Query to get the number of items created per year
+    const query = `{cube{item_information{number_of_items created_at{year}}}}`;
+    // Fetch data from Cube.js
     const response = await fetch(CUBEJS_URL, {
         method: "POST",
         headers: {
